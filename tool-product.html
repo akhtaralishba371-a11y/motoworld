@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Motorparts Product Detail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --red: #df2b1b;
+  --ink: #191919;
+  --ink2: #5a5550;
+  --line: #d7d2cc;
+  --panel: #ffffff;
+  --bg: #ececec;
+  --dark: #13171d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); }
+.page-wrap { width: min(1260px, calc(100% - 16px)); margin: 0 auto; }
+
+.top-strip {
+  background: #f4f4f4;
+  border-bottom: 1px solid #dbdbdb;
+  font-size: 11px;
+  color: #777;
+}
+.top-strip .inner {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.logo-mini {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: .6px;
+}
+.logo-mini .r { color: var(--red); }
+.nav-mini {
+  display: flex;
+  gap: 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.breadcrumb {
+  background: #f8f8f8;
+  border-bottom: 1px solid #dedede;
+  padding: 6px 0;
+  font-size: 10px;
+  color: #8a847d;
+}
+
+.page {
+  padding: 10px 0 24px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 12px;
+  align-items: start;
+}
+
+.product-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(22, 22, 22, 0.08);
+  overflow: hidden;
+}
+.hero-row {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) 56px minmax(0, 1fr);
+  gap: 8px;
+}
+.hero-image {
+  border: 1px solid #2d2f34;
+  border-radius: 4px;
+  background: #11161d;
+  min-height: 258px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.hero-image img {
+  width: 100%;
+  height: 258px;
+  object-fit: contain;
+}
+.thumbs {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.thumbs img {
+  width: 100%;
+  height: 54px;
+  object-fit: cover;
+  border: 1px solid #b9b4ad;
+  border-radius: 4px;
+  background: #e8e5e0;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s;
+}
+.thumbs img.is-active {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px rgba(223, 43, 27, 0.2);
+}
+.meta h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  line-height: .88;
+  letter-spacing: .5px;
+}
+.meta .small {
+  margin-top: 8px;
+  color: #6d6762;
+  font-size: 10px;
+  line-height: 1.35;
+}
+.meta .stock {
+  margin-top: 8px;
+  color: #0d7f45;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+.meta .price {
+  margin-top: 6px;
+  font-size: 40px;
+  line-height: .88;
+  font-weight: 800;
+}
+.buy,
+.buy-row {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.qty {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  display: inline-flex;
+  overflow: hidden;
+  width: auto;
+}
+.qty button,
+.qty span {
+  width: 30px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+.qty button { border: none; background: #f5f3ef; }
+.add-btn {
+  border: none;
+  border-radius: 16px;
+  height: 30px;
+  padding: 0 16px;
+  background: var(--red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+.metrics {
+  margin-top: 9px;
+  display: grid;
+  gap: 6px;
+}
+.metric {
+  border: 1px solid #d2cdc6;
+  border-radius: 2px;
+  padding: 4px 5px;
+}
+.metric .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 9px;
+  color: #5b5550;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.metric .bar {
+  margin-top: 3px;
+  height: 5px;
+  background: #efebe6;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.metric .bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #121212, #3a3a3a);
+}
+
+.content {
+  padding: 0 10px 10px;
+}
+.desc {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #3d3833;
+  margin-bottom: 10px;
+}
+.facts-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.facts h4 {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.facts ul {
+  padding-left: 14px;
+  font-size: 11px;
+  color: #3f3a34;
+  display: grid;
+  gap: 3px;
+}
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--line);
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+}
+.tabs div {
+  text-align: center;
+  padding: 9px 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: #f4f1ed;
+  border-right: 1px solid var(--line);
+}
+.tabs div:last-child { border-right: none; }
+.tabs .active {
+  background: #fff;
+  color: var(--red);
+}
+.spec-grid {
+  border: 1px solid var(--line);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  font-size: 10px;
+}
+.spec-col {
+  display: grid;
+  gap: 4px;
+}
+.spec-item b { display: block; color: #221f1c; font-weight: 700; }
+.spec-item span { color: #625b54; }
+
+.side {
+  display: grid;
+  gap: 10px;
+}
+.side-card {
+  background: linear-gradient(160deg, #1f242b 0%, #0f1318 100%);
+  border: 1px solid #353f4b;
+  border-radius: 7px;
+  color: #f6f6f6;
+  padding: 10px;
+  min-height: 120px;
+}
+.side-card h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 34px;
+  line-height: .9;
+  letter-spacing: .4px;
+}
+.bundle-list {
+  margin-top: 8px;
+  display: grid;
+  gap: 7px;
+}
+.bundle {
+  border: 1px solid #404a57;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.24);
+  padding: 6px;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 6px;
+}
+.bundle img {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #d9d9d9;
+}
+.bundle b {
+  font-size: 10px;
+  line-height: 1.2;
+}
+.bundle span {
+  font-size: 10px;
+  color: #aeb8c6;
+}
+.side-card ul {
+  margin-top: 8px;
+  padding-left: 14px;
+  font-size: 11px;
+  color: #d4dae3;
+  display: grid;
+  gap: 4px;
+}
+.side-card p {
+  margin-top: 8px;
+  color: #cfd6e0;
+  font-size: 11px;
+}
+.side-card input {
+  margin-top: 8px;
+  width: 100%;
+  height: 30px;
+  border: 1px solid #3f4a58;
+  border-radius: 5px;
+  background: #0d1116;
+  color: #fff;
+  font-size: 11px;
+  padding: 0 8px;
+}
+
+.footer-strip {
+  margin-top: 14px;
+  background: linear-gradient(90deg, #1c0f10, #2a1010 36%, #130d0f);
+  border-top: 1px solid #311b1b;
+  padding: 16px 0;
+}
+.footer-mini {
+  color: #8f7e7a;
+  font-size: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+@media (max-width: 1020px) {
+  .layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .hero-row {
+    grid-template-columns: minmax(0, 1fr) 50px minmax(0, .9fr);
+  }
+  .meta h1 { font-size: 30px; }
+  .meta .price { font-size: 30px; }
+  .buy {
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .qty button,
+  .qty span {
+    width: 34px;
+    height: 32px;
+  }
+  .add-btn {
+    height: 34px;
+    padding: 0 18px;
+    font-size: 11px;
+  }
+  .spec-grid { grid-template-columns: 1fr; }
+  .footer-mini { flex-direction: column; }
+}
+@media (max-width: 520px) {
+  .hero-row {
+    grid-template-columns: 1fr;
+  }
+  .thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .thumbs img { height: 56px; }
+  .buy {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+  <header class="top-strip">
+    <div class="page-wrap inner">
+      <div class="logo-mini"><span class="r">MOT</span>OPARTS.IO</div>
+      <nav class="nav-mini">
+        <span>Home</span><span>Accessories</span><span>Parts</span><span>Tires</span><span>Gifts</span><span>Brands</span>
+      </nav>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <div class="page-wrap">Home > Garage > Brembo > Accessories > Parts > Tires > Gifts & Brands > Article</div>
+  </div>
+
+  <main class="page">
+    <div class="page-wrap layout">
+      <section class="product-card">
+        <div class="hero-row">
+          <div class="hero-image"><img id="heroImage" src="images/icon-ordering2.webp" alt="Product" /></div>
+          <div class="thumbs">
+            <img id="thumb1" src="images/icon-ordering2.webp" alt="Thumb 1" />
+            <img id="thumb2" src="images/icon.webp" alt="Thumb 2" />
+            <img id="thumb3" src="images/icons2.webp" alt="Thumb 3" />
+            <img id="thumb4" src="images/quickfilaments.jpg" alt="Thumb 4" />
+          </div>
+          <div class="meta">
+            <h1 id="title">BREMBO GT-SERIES ULTRA-PERFORMANCE BRAKE KIT (RED CALIPERS)</h1>
+            <div class="small" id="sku">Garage Match: Fits Porsche 911 GT3 and BMW M4</div>
+            <div class="stock" id="stock">In Stock</div>
+            <div class="price" id="price">$3,150.00</div>
+            <div class="buy">
+              <div class="qty"><button type="button">-</button><span>1</span><button type="button">+</button></div>
+              <button class="add-btn" type="button">Add To Project</button>
+            </div>
+            <div class="metrics">
+              <div class="metric"><div class="row"><span>Durability</span><span>95%</span></div><div class="bar"><i style="width:95%"></i></div></div>
+              <div class="metric"><div class="row"><span>Weight Savings</span><span>40%</span></div><div class="bar"><i style="width:40%"></i></div></div>
+              <div class="metric"><div class="row"><span>Performance Rating</span><span>90%</span></div><div class="bar"><i style="width:90%"></i></div></div>
+              <div class="metric"><div class="row"><span>Install Difficulty</span><span>3/5</span></div><div class="bar"><i style="width:60%"></i></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content">
+          <p class="desc" id="desc1">BREMBO GT SERIES ultra-performance high-performance brake kit (RED CALIPERS) automated for models. Brembo multi-piston, drilled and slotted motorsport calipers. The Brembo one-piece rotors use heat control internal vanes and act topically as way of technical, rotors are than the brake calipers in remote sufficient models.</p>
+          <p class="desc" id="desc2">The BREMBO GT SERIES multi-piston of drilled and high-performance brake discs high-qualities preheat rotational temperatures and are made of eco heat plan material high-performance brake calipers with twin dust control. Long arches in cooling system.</p>
+
+          <div class="facts-wrap">
+            <div class="facts">
+              <h4>Technicals</h4>
+              <ul id="list1"></ul>
+            </div>
+            <div class="facts">
+              <h4>Infographics</h4>
+              <ul id="list2"></ul>
+            </div>
+          </div>
+
+          <div class="tabs">
+            <div class="active">Specifications</div>
+            <div>Fitment Guide</div>
+            <div>Installation</div>
+            <div>Reviews</div>
+          </div>
+          <div class="spec-grid" id="specGrid"></div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <div class="side-card">
+          <h3>Complete The Build</h3>
+          <div class="bundle-list">
+            <div class="bundle"><img src="images/icon-ordering2.webp" alt="Pads" /><div><b>Matching Performance Rebalance Brake Pads</b><span>Brake Repair Kit</span></div></div>
+            <div class="bundle"><img src="images/icon.webp" alt="Fluid" /><div><b>Matching Enriched Brake Fluid</b><span>Brake Fluid V2</span></div></div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <h3>Technical Search</h3>
+          <ul>
+            <li>Find matching roots by vehicle or specs.</li>
+            <li>Find matching names</li>
+            <li>Find specifications</li>
+            <li>Specs</li>
+          </ul>
+        </div>
+
+        <div class="side-card">
+          <h3>Article Alerts</h3>
+          <p>Sign up to receive our newsletter and newsletter to your inbox.</p>
+          <input type="email" placeholder="Enter email" />
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer-strip">
+    <div class="page-wrap footer-mini">
+      <span>MOTPARTS.IO</span>
+      <span>About � Terms � Privacy � Contact</span>
+      <span>2026</span>
+    </div>
+  </footer>
+
+<script>
+const products = {
+  'tools-product-1': {
+    title: 'BREMBO GT-SERIES ULTRA-PERFORMANCE BRAKE KIT (RED CALIPERS)',
+    sku: 'Garage Match: Fits Porsche 911 GT3 and BMW M4',
+    stock: 'In Stock',
+    price: '$3,150.00',
+    images: ['images/icon-ordering2.webp', 'images/icon.webp', 'images/icons2.webp', 'images/quickfilaments.jpg'],
+    desc1: 'BREMBO GT SERIES ultra-performance high-performance brake kit (RED CALIPERS) automated for models. Brembo multi-piston, drilled and slotted motorsport calipers. The Brembo one-piece rotors use heat control internal vanes and act topically as way of technical, rotors are than the brake calipers in remote sufficient models.',
+    desc2: 'The BREMBO GT SERIES multi-piston of drilled and high-performance brake discs high-qualities preheat rotational temperatures and are made of eco heat plan material high-performance brake calipers with twin dust control. Long arches in cooling system.',
+    factsLeft: ['Rotors', 'K-Sized drilling', 'BMW GT3', 'Brake Fluid'],
+    factsRight: ['Cooling Vanes', 'Cooling Savings vs OEM', 'Performance Rating', 'Install Difficulty'],
+    specs: [
+      ['Disc Diameter', '380mm', 'Material', 'High-Carbon Alloy'],
+      ['Disc Thickness', '34mm', 'Disc Style', 'Drill + Slotted'],
+      ['Piston Count', '6 Front / 4 Rear', 'Driver Side', 'L / R'],
+      ['Material', 'Alloy', 'Finish', 'Anodized Red']
+    ]
+  },
+  'tools-product-2': {
+    title: 'DIGITAL MULTIMETER PRO GARAGE DIAGNOSTIC KIT',
+    sku: 'Garage Match: Universal diagnostics and battery testing',
+    stock: 'In Stock',
+    price: '$49.90',
+    images: ['images/icon.webp', 'images/icon-ordering2.webp', 'images/icons2.webp', 'images/quickfilaments.jpg'],
+    desc1: 'Professional digital multimeter for garage and workshop use with fast auto-range switching and high contrast backlit readout.',
+    desc2: 'Designed for reliable continuity, voltage and resistance tests. Compact housing is impact-resistant and ideal for service bays.',
+    factsLeft: ['Voltage Test', 'Continuity', 'Battery Check', 'Current Test'],
+    factsRight: ['Backlit Display', 'Auto Range', 'Fast Sampling', 'Compact Housing'],
+    specs: [
+      ['Display', 'LCD Backlit', 'Material', 'ABS Housing'],
+      ['Voltage Range', 'Up to 1000V', 'Battery Type', '9V'],
+      ['Protection', 'Fused Input', 'Weight', '320g'],
+      ['Warranty', '1 Year', 'Fitment', 'Universal']
+    ]
+  },
+  'tools-product-3': {
+    title: 'HYDRAULIC FLOOR JACK LOW PROFILE PRO EDITION',
+    sku: 'Garage Match: Cars and light SUVs',
+    stock: 'In Stock',
+    price: '$169.80',
+    images: ['images/quickfilaments.jpg', 'images/icon-ordering2.webp', 'images/icons2.webp', 'images/icon.webp'],
+    desc1: 'Low-profile steel jack built for stable lifting and consistent workshop performance under daily use conditions.',
+    desc2: 'Fast-lift mechanism reduces pumping cycles while wide base improves safety across uneven garage floors.',
+    factsLeft: ['Low Entry Point', 'Fast Lift', 'Steel Frame', 'Safety Valve'],
+    factsRight: ['Load Stability', 'Smooth Wheels', 'Service Ready', 'Long Handle'],
+    specs: [
+      ['Lift Range', '90-480mm', 'Material', 'Reinforced Steel'],
+      ['Capacity', '3 Ton', 'Weight', '28kg'],
+      ['Profile', 'Low Entry', 'Pump Type', 'Hydraulic'],
+      ['Warranty', '1 Year', 'Fitment', 'Cars + SUVs']
+    ]
+  },
+  'tools-product-4': {
+    title: 'CORDLESS IMPACT DRIVER HIGH TORQUE COMPACT',
+    sku: 'Garage Match: Universal workshop fastening',
+    stock: 'In Stock',
+    price: '$99.00',
+    images: ['images/icons2.webp', 'images/icon-ordering2.webp', 'images/icon.webp', 'images/quickfilaments.jpg'],
+    desc1: 'Compact impact driver engineered for fast removal and fastening under high torque demands.',
+    desc2: 'Balanced grip and efficient brushless motor help reduce user fatigue while keeping consistent output.',
+    factsLeft: ['Brushless Motor', 'Compact Body', 'Quick Chuck', 'LED Light'],
+    factsRight: ['High Torque', 'Fast Trigger', 'Low Vibration', 'Shop Durable'],
+    specs: [
+      ['Max Torque', '220Nm', 'Material', 'Composite Housing'],
+      ['Speed', '0-2900 RPM', 'Weight', '1.3kg'],
+      ['Battery', '20V', 'Motor', 'Brushless'],
+      ['Warranty', '1 Year', 'Fitment', 'Universal']
+    ]
+  },
+  'tools-product-5': {
+    title: 'OBD2 SCANNER LIVE DATA DIAGNOSTIC READER',
+    sku: 'Garage Match: OBD2 compatible vehicles',
+    stock: 'In Stock',
+    price: '$65.00',
+    images: ['images/icon.webp', 'images/icons2.webp', 'images/icon-ordering2.webp', 'images/quickfilaments.jpg'],
+    desc1: 'Live diagnostics scanner with rapid code reading, freeze frame data and trouble-code clearing support.',
+    desc2: 'Plug-and-scan workflow helps technicians quickly isolate faults and confirm fixes after service.',
+    factsLeft: ['Read Codes', 'Clear Codes', 'Live Data', 'Freeze Frame'],
+    factsRight: ['Fast Boot', 'Wide Protocols', 'Simple UI', 'Service Ready'],
+    specs: [
+      ['Display', 'Color LCD', 'Material', 'ABS Housing'],
+      ['Protocols', 'OBD2 Standard', 'Cable', 'Integrated'],
+      ['Update', 'USB', 'Weight', '260g'],
+      ['Warranty', '1 Year', 'Fitment', 'OBD2 Vehicles']
+    ]
+  }
+};
+
+const params = new URLSearchParams(window.location.search);
+const key = params.get('product') || 'tools-product-1';
+const data = products[key] || products['tools-product-1'];
+
+document.getElementById('title').textContent = data.title;
+document.getElementById('sku').textContent = data.sku;
+document.getElementById('stock').textContent = data.stock;
+document.getElementById('price').textContent = data.price;
+document.getElementById('desc1').textContent = data.desc1;
+document.getElementById('desc2').textContent = data.desc2;
+
+const heroImage = document.getElementById('heroImage');
+heroImage.src = data.images[0];
+document.getElementById('thumb1').src = data.images[0];
+document.getElementById('thumb2').src = data.images[1];
+document.getElementById('thumb3').src = data.images[2];
+document.getElementById('thumb4').src = data.images[3];
+
+const thumbs = [
+  document.getElementById('thumb1'),
+  document.getElementById('thumb2'),
+  document.getElementById('thumb3'),
+  document.getElementById('thumb4')
+];
+
+function setActiveThumb(index) {
+  thumbs.forEach((thumb, i) => {
+    if (!thumb) return;
+    thumb.classList.toggle('is-active', i === index);
+  });
+}
+
+thumbs.forEach((thumb, index) => {
+  if (!thumb) return;
+  thumb.addEventListener('click', () => {
+    const nextImage = data.images[index] || data.images[0];
+    heroImage.src = nextImage;
+    heroImage.alt = data.title + ' image ' + (index + 1);
+    setActiveThumb(index);
+  });
+});
+setActiveThumb(0);
+
+const list1 = document.getElementById('list1');
+const list2 = document.getElementById('list2');
+list1.innerHTML = '';
+list2.innerHTML = '';
+data.factsLeft.forEach(item => { const li = document.createElement('li'); li.textContent = item; list1.appendChild(li); });
+data.factsRight.forEach(item => { const li = document.createElement('li'); li.textContent = item; list2.appendChild(li); });
+
+const specGrid = document.getElementById('specGrid');
+specGrid.innerHTML = '';
+data.specs.forEach(row => {
+  for (let i = 0; i < row.length; i += 2) {
+    const col = document.createElement('div');
+    col.className = 'spec-col';
+    const idx = i;
+    if (!row[idx]) continue;
+    const item = document.createElement('div');
+    item.className = 'spec-item';
+    item.innerHTML = '<b>' + row[idx] + '</b><span>' + (row[idx + 1] || '') + '</span>';
+    col.appendChild(item);
+    specGrid.appendChild(col);
+  }
+});
+</script>
+</body>
+</html>
